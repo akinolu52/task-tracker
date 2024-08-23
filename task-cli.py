@@ -76,9 +76,19 @@ def main():
             print(task.to_dict())
 
     elif command == 'list':
-        print("Listing tasks")
-    elif command == 'done':
-        print("Completing task")
+        if len(sys.argv) > 3:
+            print("Usage: task-cli list <status>")
+            return
+
+        status = None
+        if len(sys.argv) == 3:
+            status = sys.argv[2]
+
+        tasks = task_processor.get_tasks(status)
+
+        print(f"Listing tasks with status: {status or 'ALL'}")
+        print([Task.to_dict(task) for task in tasks])
+
     else:
         print("Unknown command")
 

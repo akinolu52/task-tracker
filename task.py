@@ -216,8 +216,15 @@ class TaskProcessor:
             print(f"Task with ID:{id} not found!")
             return None
 
-    def get(self):
-        pass
+    def get_tasks(self, status: Optional[str]) -> List[Task]:
+        tasks: List[Task] = []
+
+        if status:
+            tasks = [task for task in self.tasks if task.status == STATUS_MAP.get(status.upper())]
+        else:
+            tasks = self.tasks
+
+        return tasks
 
     def get_all_done(self):
         pass
