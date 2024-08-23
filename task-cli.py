@@ -24,6 +24,16 @@ def main():
 
         task_processor.add_task(description)
 
+    elif command == 'update':
+        if len(sys.argv) != 4:
+            print("Usage: task-cli update <id> <description>")
+            return
+
+        id = int(sys.argv[2])
+        description = sys.argv[3]
+
+        task_processor.update_task(id, description)
+
     elif command == 'list':
         print("Listing tasks")
     elif command == 'done':

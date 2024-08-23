@@ -16,8 +16,8 @@ class Task:
         self.id: int = id
         self.description: str = description
         self.status: str = status or STATUS_MAP.get('TODO')
-        self.createdAt: str = str(created_at)
-        self.updatedAt: str = str(updated_at)
+        self.createdAt: str = created_at.isoformat()
+        self.updatedAt: str = updated_at.isoformat()
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -28,6 +28,16 @@ class Task:
             'updatedAt': self.updatedAt,
         }
 
+    @staticmethod
+    def from_dict(data: Dict[str, Any]) -> 'Task':
+        return Task(
+            id=data['id'],
+            description=data['description'],
+            status=data['status'],
+            created_at=datetime.fromisoformat(data['createdAt']),
+            updated_at=datetime.fromisoformat(data['updatedAt'])
+        )
+
 
 class TaskProcessor:
     def __init__(self, ):
@@ -36,18 +46,18 @@ class TaskProcessor:
     @staticmethod
     def load_tasks() -> List[Task]:
         """
-            check if the tasks JSON file exist
-            Load tasks from a file
+            check if the tasks JSON file exist and Load tasks from a file
             :return: the content of the tasks JSON file
         """
         try:
             if os.path.isfile(TASK_FILE_PATH) and os.access(TASK_FILE_PATH, os.R_OK):
                 with open(TASK_FILE_PATH, 'r') as file:
-                    return json.loads(file.read())
+                    data = json.load(file)
+                    return [Task.from_dict(task) for task in data]
             else:
-                # file is missing or not readable
+                # file is missing or not readable, then create an empty file
                 with open(TASK_FILE_PATH, 'w') as file:
-                    file.write(json.dumps([]))
+                    json.dump([], file)
                     return []
         except FileNotFoundError:
             return []
@@ -60,14 +70,13 @@ class TaskProcessor:
         try:
             with open(TASK_FILE_PATH, 'w') as file:
                 tasks_dict = [task.to_dict() for task in self.tasks]
-
                 json.dump(tasks_dict, file, indent=4)
                 return True
         except Exception as ex:
             print('Error: ', ex)
             return False
 
-    def add_task(self, description):
+    def add_task(self, description: str):
         """
             Add a new task
             :param description: the description of the task
@@ -89,11 +98,18 @@ class TaskProcessor:
         # save the tasks to the file
         if self.save_tasks():
             print(f"Task added successfully (ID: {new_task.id})")
+            return True
 
-        return True
+        return False
 
-    def update(self):
-        pass
+    def update_task(self, id: int, description: str) -> Task:
+        """
+        This method will update the stored task based on its ID
+        :param id: the id of the task
+        :param description: the new description
+        :return: the task information
+        """
+
 
     def delete(self):
         pass
