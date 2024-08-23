@@ -1,5 +1,7 @@
 import sys
 
+from task import TaskProcessor
+
 
 def main():
     if len(sys.argv) < 2:
@@ -7,6 +9,21 @@ def main():
         return
 
     command = sys.argv[1]
+    task_processor = TaskProcessor()
+
+    if command == 'add':
+        if len(sys.argv) != 3:
+            print("Usage: task-cli add <description>")
+            return
+        description = sys.argv[2]
+        task_processor.add_task(description)
+
+    elif command == 'list':
+        print("Listing tasks")
+    elif command == 'done':
+        print("Completing task")
+    else:
+        print("Unknown command")
 
 
 if __name__ == '__main__':
