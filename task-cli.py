@@ -1,4 +1,5 @@
 import sys
+from typing import List
 
 from task import TaskProcessor, Task
 
@@ -35,8 +36,20 @@ def main():
         updated_task = task_processor.update_task(id, description)
 
         if isinstance(updated_task, Task):
-            print(updated_task.to_dict())
             print('Task updated successfully')
+            print(updated_task.to_dict())
+
+    elif command == 'delete':
+        if len(sys.argv) != 3:
+            print("Usage: task-cli delete <id>")
+            return
+
+        id = int(sys.argv[2])
+        tasks = task_processor.delete_task(id)
+
+        if len(tasks):
+            print('Task deleted successfully')
+            print([Task.to_dict(task) for task in tasks])
 
     elif command == 'list':
         print("Listing tasks")

@@ -1,6 +1,6 @@
 import json
 import os
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 from datetime import datetime
 
 TASK_FILE_PATH = './tasks.json'
@@ -76,6 +76,17 @@ class TaskProcessor:
             print('Error: ', ex)
             return False
 
+    def get_task_index(self, id: int) -> Union[None, int]:
+        task_index = None
+
+        # find the task
+        for idx, task in enumerate(self.tasks):
+            if task.id == id:
+                task_index = idx
+                break
+
+        return task_index
+
     def add_task(self, description: str):
         """
             Add a new task
@@ -110,13 +121,9 @@ class TaskProcessor:
         """
 
         task_to_update: Optional[Task] = None
-        task_index = None
 
         # find the task
-        for idx, task in enumerate(self.tasks):
-            if task.id == id:
-                task_index = idx
-                break
+        task_index = self.get_task_index(id)
 
         if task_index:
             task_to_update = self.tasks[task_index]
@@ -135,8 +142,22 @@ class TaskProcessor:
             print(f"Task with ID:{id} not found!")
             return None
 
-    def delete(self):
-        pass
+    def delete_task(self, id: int) -> Optional[List[Task]]:
+        # find the task
+        task_index = self.get_task_index(id)
+
+        if task_index:
+            del self.tasks[task_index]
+
+            # save the updated task to json
+            self.save_tasks()
+
+            # return all tasks
+            return self.tasks
+
+        else:
+            print(f"Task with ID:{id} not found!")
+            return None
 
     def get(self):
         pass
