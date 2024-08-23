@@ -93,7 +93,6 @@ class TaskProcessor:
 
         # add the new task to the list of tasks
         self.tasks.append(new_task)
-        print(self.tasks, type(self.tasks))
 
         # save the tasks to the file
         if self.save_tasks():
@@ -102,14 +101,39 @@ class TaskProcessor:
 
         return False
 
-    def update_task(self, id: int, description: str) -> Task:
+    def update_task(self, id: int, description: str) -> Optional[Task]:
         """
-        This method will update the stored task based on its ID
+        update the stored task based on its ID
         :param id: the id of the task
-        :param description: the new description
-        :return: the task information
+        :param description: the new description of the task
+        :return: the updated task information or none if not found
         """
 
+        task_to_update: Optional[Task] = None
+        task_index = None
+
+        # find the task
+        for idx, task in enumerate(self.tasks):
+            if task.id == id:
+                task_index = idx
+                break
+
+        if task_index:
+            task_to_update = self.tasks[task_index]
+            task_to_update.description = description
+            task_to_update.updatedAt = datetime.now().isoformat()
+
+            self.tasks[task_index] = task_to_update
+
+            # save the updated task to json
+            self.save_tasks()
+
+            # return the task
+            return task_to_update
+
+        else:
+            print(f"Task with ID:{id} not found!")
+            return None
 
     def delete(self):
         pass

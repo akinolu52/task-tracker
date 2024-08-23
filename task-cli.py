@@ -1,6 +1,6 @@
 import sys
 
-from task import TaskProcessor
+from task import TaskProcessor, Task
 
 
 def main():
@@ -32,7 +32,11 @@ def main():
         id = int(sys.argv[2])
         description = sys.argv[3]
 
-        task_processor.update_task(id, description)
+        updated_task = task_processor.update_task(id, description)
+
+        if isinstance(updated_task, Task):
+            print(updated_task.to_dict())
+            print('Task updated successfully')
 
     elif command == 'list':
         print("Listing tasks")
