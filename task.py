@@ -76,6 +76,11 @@ class TaskProcessor:
             print('Error: ', ex)
             return False
 
+    def get_next_id(self):
+        if not self.tasks:
+            return 1
+        return max(task.id for task in self.tasks) + 1
+
     def get_task_index(self, id: int) -> Union[None, int]:
         task_index = None
 
@@ -95,7 +100,7 @@ class TaskProcessor:
 
         # create a new task object
         new_task = Task(
-            id=len(self.tasks) + 1,
+            id=self.get_next_id(),
             description=description,
             status=STATUS_MAP.get('TODO'),
             created_at=datetime.now(),
@@ -125,7 +130,7 @@ class TaskProcessor:
         # find the task
         task_index = self.get_task_index(id)
 
-        if task_index:
+        if isinstance(task_index, int):
             task_to_update = self.tasks[task_index]
             task_to_update.description = description
             task_to_update.updatedAt = datetime.now().isoformat()
@@ -151,7 +156,7 @@ class TaskProcessor:
         # find the task
         task_index = self.get_task_index(id)
 
-        if task_index:
+        if isinstance(task_index, int):
             del self.tasks[task_index]
 
             # save the updated task to json
@@ -173,7 +178,7 @@ class TaskProcessor:
         # find the task
         task_index = self.get_task_index(id)
 
-        if task_index:
+        if isinstance(task_index, int):
             task_to_update = self.tasks[task_index]
             task_to_update.status = STATUS_MAP.get('IN-PROGRESS')
             task_to_update.updatedAt = datetime.now().isoformat()
@@ -199,7 +204,7 @@ class TaskProcessor:
         # find the task
         task_index = self.get_task_index(id)
 
-        if task_index:
+        if isinstance(task_index, int):
             task_to_update = self.tasks[task_index]
             task_to_update.status = STATUS_MAP.get('DONE')
             task_to_update.updatedAt = datetime.now().isoformat()
@@ -217,6 +222,11 @@ class TaskProcessor:
             return None
 
     def get_tasks(self, status: Optional[str]) -> List[Task]:
+        """
+        filter tasks based on status or return all if status is empty
+        :param status: can be done, in-progress, todo or None - this is a filter for the tasks
+        :return: all the tasks matching the set filter
+        """
         tasks: List[Task] = []
 
         if status:
@@ -225,9 +235,3 @@ class TaskProcessor:
             tasks = self.tasks
 
         return tasks
-
-    def get_all_done(self):
-        pass
-
-    def get_in_progress(self):
-        pass

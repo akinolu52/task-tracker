@@ -1,23 +1,9 @@
 [
     {
         "id": 1,
-        "description": "Buy Groceries 2",
+        "description": "Buy groceries",
         "status": "todo",
-        "createdAt": "2024-08-23T10:10:46.906663",
-        "updatedAt": "2024-08-23T10:10:46.906670"
-    },
-    {
-        "id": 4,
-        "description": "Buy Groceries 2",
-        "status": "in-progress",
-        "createdAt": "2024-08-23T10:50:10.258390",
-        "updatedAt": "2024-08-23T10:58:52.004084"
-    },
-    {
-        "id": 3,
-        "description": "Buy Groceries 2",
-        "status": "todo",
-        "createdAt": "2024-08-23T11:01:19.664680",
-        "updatedAt": "2024-08-23T11:01:19.664687"
+        "createdAt": "2024-08-23T11:29:39.998484",
+        "updatedAt": "2024-08-23T11:29:39.998490"
     }
 ]

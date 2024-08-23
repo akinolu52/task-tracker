@@ -47,8 +47,10 @@ def main():
         id = int(sys.argv[2])
         tasks = task_processor.delete_task(id)
 
-        if len(tasks):
+        if tasks is not None:
             print('Task deleted successfully')
+
+        if tasks and len(tasks):
             print([Task.to_dict(task) for task in tasks])
 
     elif command == 'mark-in-progress':
