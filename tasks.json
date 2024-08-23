@@ -9,8 +9,8 @@
     {
         "id": 4,
         "description": "Buy Groceries 2",
-        "status": "todo",
+        "status": "in-progress",
         "createdAt": "2024-08-23T10:50:10.258390",
-        "updatedAt": "2024-08-23T10:50:10.258397"
+        "updatedAt": "2024-08-23T10:58:52.004084"
     }
 ]

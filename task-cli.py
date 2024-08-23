@@ -51,6 +51,30 @@ def main():
             print('Task deleted successfully')
             print([Task.to_dict(task) for task in tasks])
 
+    elif command == 'mark-in-progress':
+        if len(sys.argv) != 3:
+            print("Usage: task-cli mark-in-progress <id>")
+            return
+
+        id = int(sys.argv[2])
+        task = task_processor.mark_in_progress(id)
+
+        if isinstance(task, Task):
+            print('Task marked as in-progress successfully')
+            print(task.to_dict())
+
+    elif command == 'mark-done':
+        if len(sys.argv) != 3:
+            print("Usage: task-cli mark-done <id>")
+            return
+
+        id = int(sys.argv[2])
+        task = task_processor.mark_done(id)
+
+        if isinstance(task, Task):
+            print('Task marked as done successfully')
+            print(task.to_dict())
+
     elif command == 'list':
         print("Listing tasks")
     elif command == 'done':

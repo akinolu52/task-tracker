@@ -143,6 +143,11 @@ class TaskProcessor:
             return None
 
     def delete_task(self, id: int) -> Optional[List[Task]]:
+        """
+        delete a task based on the passed ID
+        :param id: the ID of the task to delete
+        :return: the updated tasks information or none if not found
+        """
         # find the task
         task_index = self.get_task_index(id)
 
@@ -154,6 +159,58 @@ class TaskProcessor:
 
             # return all tasks
             return self.tasks
+
+        else:
+            print(f"Task with ID:{id} not found!")
+            return None
+
+    def mark_in_progress(self, id: int) -> Optional[Task]:
+        """
+        Update the task status to IN-PROGRESS based on the passed ID
+        :param id: the ID of the task to delete
+        :return: the updated task information or none if not found
+        """
+        # find the task
+        task_index = self.get_task_index(id)
+
+        if task_index:
+            task_to_update = self.tasks[task_index]
+            task_to_update.status = STATUS_MAP.get('IN-PROGRESS')
+            task_to_update.updatedAt = datetime.now().isoformat()
+
+            self.tasks[task_index] = task_to_update
+
+            # save the updated task to json
+            self.save_tasks()
+
+            # return the task
+            return task_to_update
+
+        else:
+            print(f"Task with ID:{id} not found!")
+            return None
+
+    def mark_done(self, id: int) -> Optional[Task]:
+        """
+        Update the task status to DONE based on the passed ID
+        :param id: the ID of the task to delete
+        :return: the updated task information or none if not found
+        """
+        # find the task
+        task_index = self.get_task_index(id)
+
+        if task_index:
+            task_to_update = self.tasks[task_index]
+            task_to_update.status = STATUS_MAP.get('DONE')
+            task_to_update.updatedAt = datetime.now().isoformat()
+
+            self.tasks[task_index] = task_to_update
+
+            # save the updated task to json
+            self.save_tasks()
+
+            # return the task
+            return task_to_update
 
         else:
             print(f"Task with ID:{id} not found!")
