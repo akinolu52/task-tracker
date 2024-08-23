@@ -1,5 +1,4 @@
 import sys
-from typing import List
 
 from task import TaskProcessor, Task
 

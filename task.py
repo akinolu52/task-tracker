@@ -230,6 +230,10 @@ class TaskProcessor:
         tasks: List[Task] = []
 
         if status:
+            if status not in ['in-progress', 'done', 'todo']:
+                print(f"Unknown status!")
+                return self.tasks
+
             tasks = [task for task in self.tasks if task.status == STATUS_MAP.get(status.upper())]
         else:
             tasks = self.tasks
