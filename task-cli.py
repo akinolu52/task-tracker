@@ -15,7 +15,13 @@ def main():
         if len(sys.argv) != 3:
             print("Usage: task-cli add <description>")
             return
+
         description = sys.argv[2]
+
+        if len(description) < 1:
+            print("Usage: task-cli add <description>")
+            return
+
         task_processor.add_task(description)
 
     elif command == 'list':

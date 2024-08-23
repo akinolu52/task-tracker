@@ -55,7 +55,7 @@ class TaskProcessor:
     def save_tasks(self) -> bool:
         """
             Save all tasks into the JSON file
-        :return: None
+            :return: boolean indicating if the process is successful or not
         """
         try:
             with open(TASK_FILE_PATH, 'w') as file:
