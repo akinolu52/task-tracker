@@ -180,7 +180,7 @@ class TaskProcessor:
 
     def mark_task(self, id: int, status: str) -> Optional[Task]:
         """
-        Update the task status to IN-PROGRESS based on the passed ID
+        Find and Update the task status based on the passed ID
         :param status: the new status of the task, can either be IN-PROGRESS or DONE
         :param id: the ID of the task to delete
         :return: the updated task information or none if not found
