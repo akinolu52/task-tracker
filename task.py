@@ -55,7 +55,7 @@ class TaskProcessor:
                     data = json.load(file)
                     return [Task.from_dict(task) for task in data]
             else:
-                # file is missing or not readable, then create an empty file
+                # if the file is missing, then create an empty file
                 with open(TASK_FILE_PATH, 'w') as file:
                     json.dump([], file)
                     return []
@@ -77,9 +77,7 @@ class TaskProcessor:
             return False
 
     def get_next_id(self):
-        if not self.tasks:
-            return 1
-        return max(task.id for task in self.tasks) + 1
+        return max(task.id for task in self.tasks) + 1 if self.tasks else 1
 
     def get_task_index(self, id: int) -> Union[None, int]:
         task_index = None
@@ -137,7 +135,7 @@ class TaskProcessor:
 
             self.tasks[task_index] = task_to_update
 
-            # save the updated task to json
+            # save the updated task to JSON
             self.save_tasks()
 
             # return the task
@@ -151,7 +149,7 @@ class TaskProcessor:
         """
         delete a task based on the passed ID
         :param id: the ID of the task to delete
-        :return: the updated tasks information or none if not found
+        :return: the remaining tasks information found in the JSON file
         """
         # find the task
         task_index = self.get_task_index(id)
@@ -159,7 +157,7 @@ class TaskProcessor:
         if isinstance(task_index, int):
             del self.tasks[task_index]
 
-            # save the updated task to json
+            # save the updated task to JSON
             self.save_tasks()
 
             # return all tasks
@@ -169,9 +167,10 @@ class TaskProcessor:
             print(f"Task with ID:{id} not found!")
             return None
 
-    def mark_in_progress(self, id: int) -> Optional[Task]:
+    def mark_task(self, id: int, status: str) -> Optional[Task]:
         """
         Update the task status to IN-PROGRESS based on the passed ID
+        :param status: the new status of the task, can either be IN-PROGRESS or DONE
         :param id: the ID of the task to delete
         :return: the updated task information or none if not found
         """
@@ -180,38 +179,12 @@ class TaskProcessor:
 
         if isinstance(task_index, int):
             task_to_update = self.tasks[task_index]
-            task_to_update.status = STATUS_MAP.get('IN-PROGRESS')
+            task_to_update.status = STATUS_MAP.get(status.upper())
             task_to_update.updatedAt = datetime.now().isoformat()
 
             self.tasks[task_index] = task_to_update
 
-            # save the updated task to json
-            self.save_tasks()
-
-            # return the task
-            return task_to_update
-
-        else:
-            print(f"Task with ID:{id} not found!")
-            return None
-
-    def mark_done(self, id: int) -> Optional[Task]:
-        """
-        Update the task status to DONE based on the passed ID
-        :param id: the ID of the task to delete
-        :return: the updated task information or none if not found
-        """
-        # find the task
-        task_index = self.get_task_index(id)
-
-        if isinstance(task_index, int):
-            task_to_update = self.tasks[task_index]
-            task_to_update.status = STATUS_MAP.get('DONE')
-            task_to_update.updatedAt = datetime.now().isoformat()
-
-            self.tasks[task_index] = task_to_update
-
-            # save the updated task to json
+            # save the updated task to JSON
             self.save_tasks()
 
             # return the task
@@ -229,13 +202,15 @@ class TaskProcessor:
         """
         tasks: List[Task] = []
 
-        if status:
-            if status not in ['in-progress', 'done', 'todo']:
-                print(f"Unknown status!")
-                return self.tasks
+        if not status:
+            return self.tasks
 
-            tasks = [task for task in self.tasks if task.status == STATUS_MAP.get(status.upper())]
-        else:
-            tasks = self.tasks
+        if status not in ['in-progress', 'done', 'todo']:
+            print("Unknown status!")
+            return self.tasks
 
-        return tasks
+        return [
+            task
+            for task in self.tasks
+            if task.status == STATUS_MAP.get(status.upper())
+        ]

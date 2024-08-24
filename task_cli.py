@@ -58,7 +58,7 @@ def main():
             return
 
         id = int(sys.argv[2])
-        task = task_processor.mark_in_progress(id)
+        task = task_processor.mark_task(id, 'in-progress')
 
         if isinstance(task, Task):
             print('Task marked as in-progress successfully')
@@ -70,7 +70,7 @@ def main():
             return
 
         id = int(sys.argv[2])
-        task = task_processor.mark_done(id)
+        task = task_processor.mark_task(id, 'done')
 
         if isinstance(task, Task):
             print('Task marked as done successfully')
@@ -87,7 +87,7 @@ def main():
 
         tasks = task_processor.get_tasks(status)
 
-        print(f"Listing tasks with status: {status or 'ALL'}")
+        print(f"Listing tasks...")
         print([Task.to_dict(task) for task in tasks])
 
     else:
