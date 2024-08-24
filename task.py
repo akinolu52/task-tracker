@@ -76,10 +76,21 @@ class TaskProcessor:
             print('Error: ', ex)
             return False
 
-    def get_next_id(self):
+    def get_next_id(self) -> int:
+        """
+            get the largest ID in the tasks JSON and increment it by 1 or returns 1
+            :return: 1 if there are no tasks else return one + the largest ID
+        """
         return max(task.id for task in self.tasks) + 1 if self.tasks else 1
 
     def get_task_index(self, id: int) -> Union[None, int]:
+        """
+            This function searches through the list of tasks and
+            returns the index of the task that matches the given identifier.
+            If no task is found with the specified ID, it returns None.
+            :param id: The identifier of the task to find.
+            :return: Union[None, int]: The index of the task if found, otherwise None.
+        """
         task_index = None
 
         # find the task
